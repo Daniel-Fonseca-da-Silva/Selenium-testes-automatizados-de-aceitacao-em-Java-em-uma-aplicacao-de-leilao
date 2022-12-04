@@ -9,6 +9,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.remote.BrowserType;
 
 public class LoginTest {
 	
@@ -59,6 +60,14 @@ public class LoginTest {
 		Assert.assertTrue(browser.getCurrentUrl().equals("http://localhost:8080/login?error"));
 		Assert.assertTrue(browser.getPageSource().contains("Usuário e senha inválidos."));
 		Assert.assertThrows(NoSuchElementException.class, () -> browser.findElement(By.id(USUARIO_LOGADO)));
+	}
+	
+	@Test
+	void naoDeveriaAcessarPaginaRestritaSemEstarLogado() {
+		browser.navigate().to("http://localhost:8080/leiloes/2");
+		
+		Assert.assertTrue(browser.getCurrentUrl().equals("http://localhost:8080/login"));
+		Assert.assertFalse(browser.getPageSource().contains("Dados do Leilão"));
 	}
 	
 }
